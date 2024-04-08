@@ -3,7 +3,6 @@
 import sys
 import gzip
 import re
-#test quim kostas
 
 # Define a function to unzip gzipped files
 def g_unzip(gzip_file):
@@ -70,6 +69,11 @@ def paired_end_merge(forward_read, reverse_read):
 
 
 def openfile(filename):
+    """
+    Opens a FASTA file and creates a list of headers and sequences
+    Arguments: a FASTA file
+    Returns: a list of headers and a list of sequences
+    """
     headers = []
     sequence = []
     with open(filename, "r") as file:
@@ -93,6 +97,11 @@ def openfile(filename):
     return headers, sequence
 
 def generate_kmers(sequence):
+    """
+    Generates k-mers with k=19 from provided sequences
+    Arguments: a DNA sequence
+    Returns: 19-mers derived from the provided sequence
+    """
     kmers = []
     k = 19
     for i in range(len(sequence) - k + 1):
@@ -103,6 +112,11 @@ def generate_kmers(sequence):
 
 
 def generate_res_dict(headers, sequence):
+    """
+    Generates a dictionary of dictionaries with resistance type as keys, gene names as subkeys and k-mers as final keys with count as values
+    Arguments: a list of headers with gene name as first argument and resistance type as second argument  and a list of sequences
+    Returns: a dictionary in the above specified format
+    """
     res_dict = {}
     # First we calculate the number of sequences that we have to iterate through all.
     for i in range(len(headers)):
@@ -125,11 +139,12 @@ def generate_res_dict(headers, sequence):
     return res_dict
 
 
+# Read resistance_genes FASTA file and create header list and sequence list
 headers, sequence = openfile(sys.argv[1])
-print(headers)
+# Generate the dictionary of dictionaries to store the k-mer counts
 generate_res_dict(headers, sequence)
 
-
+# Unzip gzipped FASTQ files, convert them into FASTA files and merge them if two of them are provided
 if len(sys.argv) == 2:
     forward_read = sys.argv[1]
     f_g_unzip = g_unzip(forward_read)
