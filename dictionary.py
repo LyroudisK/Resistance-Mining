@@ -2,6 +2,7 @@
 
 import sys
 import re
+import pandas as pd
 
 def openfile(filename):
     headers = []
@@ -13,6 +14,7 @@ def openfile(filename):
             line = line.replace("\n", "")   
             if line.startswith(">"):
                 line = line.replace(">", "")
+                line = line.replace(":", "")
                 headers.append(line)
                 if sequence_flag == 0:
                     pass
@@ -58,5 +60,6 @@ def generate_res_dict(headers, sequence):
             
 
 headers, sequence = openfile(sys.argv[1])
+print(headers)
 generate_res_dict(headers, sequence)
 
